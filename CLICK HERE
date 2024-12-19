@@ -1,0 +1,276 @@
+import random
+import os
+ships = []
+
+"""
+Battle Ship Game with Bot Opponent
+"""
+
+
+#=-----------You board------------------
+def board_printer(board):
+    for i in range(5):
+        print(board[i])
+board = []
+for i in range(5):
+    board.append(['0', '0', '0', '0', '0'])
+    
+#=-----------Guess Board------------------
+def guess_board(gboard):
+    for i in range(5):
+        print(gboard[i])
+gboard = []
+for i in range(5):
+    gboard.append(['+', '+', '+', '+', '+'])
+    
+#=---------Bot Board----------------
+def bot_board(botboard):
+    for i in range(5):
+        print(botboard[i])
+botboard = []
+for i in range(5):
+    botboard.append(['0', '0', '0', '0', '0'])
+
+#=---------Bot Guess Board----------------
+def bot_guess(bguess):
+    for i in range(5):
+        print(bguess[i])
+bguess = []
+for i in range(5):
+    bguess.append(['0', '0', '0', '0', '0'])
+
+#=----------LONG SHIP---------------
+def longship(board):
+    print(" ")
+    print("This is ship #1: ['#', '#', '#', '#']")
+    while True:
+        v_h = input("Is this ship [V]vertical or [H]horizontal: ")
+        if v_h == "V" or v_h == "v" or v_h == "H" or v_h == "h":
+            break
+        else:
+            continue
+    while True:
+        row1 = int(input("What row will the ship go: "))
+        col1 = int(input("What column will the ship go: "))
+        
+        if col1 >= 2 or row1 >= 2:
+            print("The ship can not go here")
+            print(" ")
+            continue
+        else:
+            break
+    if v_h == "V" or v_h == "v":
+        for i in range(4):
+            board[row1 + i][col1] = "#"
+    if v_h == "H" or v_h == "h":
+        for i in range(4):
+                board[row1][col1 + i] = "#"
+    print(" ")
+    print('Board: ')
+    board_printer(board)
+    return board
+    
+#=-------------MED SHIP----------------
+def mediumship(board):
+    print(" ")
+    print("This is ship #2: ['#', '#', '#']")
+    while True:
+        v_h = input("Is this ship [V]vertical or [H]horizontal: ")
+        if v_h == "V" or v_h == "v" or v_h == "H" or v_h == "h":
+            break
+        else:
+            continue
+    while True:
+        row1 = int(input("What row will the ship go: "))
+        col1 = int(input("What column will the ship go: "))
+        if col1 >= 3 or row1 >= 3:
+            print("The ship can not go here")
+            print(" ")
+            continue
+        else:
+            break
+    if v_h == "V" or v_h == "v":
+        for i in range(3):
+            board[row1 + i][col1] = "#"
+    if v_h == "H" or v_h == "h":
+        for i in range(3):
+                board[row1][col1 + i] = "#"
+    print(" ")
+    print('Board: ')
+    board_printer(board)
+    return board
+    
+#=-----------SHORT-SHIP----------------
+def smallship(board):
+    print(" ")
+    print("This is ship #3: ['#', '#']")
+    while True:
+        v_h = input("Is this ship [V]vertical or [H]horizontal: ")
+        if v_h == "V" or v_h == "v" or v_h == "H" or v_h == "h":
+            break
+        else:
+            continue
+    while True:
+        row1 = int(input("What row will the ship go: "))
+        col1 = int(input("What column will the ship go: "))
+        if col1 > 3 or row1 > 3:
+            print("The ship can not go here")
+            print(" ")
+            continue
+        else:
+            break
+    if v_h == "V" or v_h == "v":
+        for i in range(2):
+            board[row1 + i][col1] = "#"
+    if v_h == "H" or v_h == "h":
+        for i in range(2):
+                board[row1][col1 + i] = "#"
+    print(" ")
+    print("Board: ")
+    board_printer(board)
+    return board
+    
+#---------Guess System---------------
+"""
+def guess_system(gboard):
+    print(" ")
+    print("This will be your guess board")
+    print("Where you make your guesses: ")
+    guess_board(gboard)
+    print(" ")
+"""
+
+#---------Bot-board-maker------------
+def bot(botboard):
+    q = ["V", "H"]
+    vh_random = random.choice(q)
+    random_row1 = random.randint(0, 1)
+    random_col1 = random.randint(0, 1)
+    if vh_random == "V":
+        for i in range(4):
+            botboard[random_row1 + i][random_col1] = "#"
+    if vh_random == "H":
+        for i in range(4):
+            botboard[random_row1][random_col1 + i] = "#"
+            
+    # -------- Ship 2 ----------
+    vh_random1 = random.choice(q)
+    while True:
+        random_row2 = random.randint(0, 2)
+        if random_row2 not in range(random_row1, random_row1 + 4):
+            break
+    while True:
+        random_col2 = random.randint(0, 2)
+        if random_row2 not in range(random_row1 + 4, random_row1):
+            break
+    if vh_random1 == "V":
+        for i in range(3):
+            botboard[random_row2 + i][random_col2] = "#"
+    if vh_random1 == "H":
+        for i in range(3):
+            botboard[random_row2][random_col2 + i] = "#"
+            
+    #---------Ship #3-----------
+    vh_random2 = random.choice(q)
+    while True:
+        random_row3 = random.randint(0, 3)
+        if random_row3 not in range(random_row1, random_row1 + 4) or random_row3 not in range(random_row2, random_row2 + 3):        
+            break
+    while True:
+        random_col3 = random.randint(0, 3)
+        if random_row3 not in range(random_row1 + 4, random_row1) or random_row3 not in range(random_row2 + 3, random_row2):
+            break
+    if vh_random2 == "V":
+        for i in range(2):
+            botboard[random_row3 + i][random_col3] = "#"
+    if vh_random2 == "H":
+        for i in range(2):
+            botboard[random_row3][random_col3 + i] = "#"
+    
+#---------------Check---------------
+def check(board, botboard, count, count1):
+    for i in range(4):
+        for j in range(4):
+            if board[i][j] == "#":
+                count = count + 1
+    if count == 0:
+        print("BOT wins")
+    else:
+        return board, botboard, count, count1
+    for t in range(4):
+        for y in range(4):
+            if botboard[t][y] == "#":
+                count1 = count1 + 1
+    if count1 == 0:
+        print("player wins")
+    return board, botboard, count, count1
+
+#------------Games player-----------
+def game_player(board, botboard, gboard, bguess, count, count1):
+    print("--------------------------------")
+    print("HERE IS YOUR BOARD: ")
+    print("Hit - X and miss - = :on guess board")
+    while True:
+        guess_board(gboard)
+        print("[][][][][][][][][][][][][]")
+        board_printer(board)
+        print(" ")
+        print("Player Turn: ")
+        while True: 
+            x = int(input("What is row of the Guess: "))
+            y = int(input("What is column of the Guess: "))
+            if gboard[x][y] == "X" or x > 4 or y > 4:
+                print("You already made this guess: ")
+                continue
+            else:
+                break
+        if botboard[x][y] == '#':
+            print("You got a HIT!")
+            gboard[x][y] = "X"
+            botboard[x][y] = "X"
+        else:
+            print("You made a MISS!")
+            gboard[x][y] = "="
+        guess_board(gboard)
+        print("[][][][][][][][][][][][][]")
+        board_printer(board)
+        print(" ")
+        print("Bots turn:")
+        while True:
+            x1 = random.randint(0,4)
+            y1 = random.randint(0,4)
+            if bguess[x1][y1] == "X":
+                x1 = random.randint(0,4) 
+                y1 = random.randint(0,4)
+            else: 
+                bguess[x1][y1] = "X"
+                break
+        if board[x1][y1] == '#':
+            print("Bot HIT")
+            board[x1][y1] = 'X'
+        else:
+            print("Bot MISSES")
+        check(board, botboard, count, count1)
+
+#=--------START-CODE---------------
+def game_starter(board, botboard, gboard, bguess):
+    print("WELCOME TO BATTLE SHIP")
+    print("Games system:")
+    print("This board starts from 0-4, Make sure your ship will fit on the board and does not over lap:")
+    print("THIS IS YOU BOARD:")
+    print(" ")
+    board_printer(board)
+    print("Place you first ship")
+    longship(board)
+    print("----------------------")
+    mediumship(board)
+    print("----------------------")
+    smallship(board)
+    print("----------------------")
+    count = 0 
+    count1 = 0
+    #guess_system(gboard)
+    bot(botboard)
+    game_player(board, botboard, gboard, bguess, count, count1)
+
+game_starter(board, botboard, gboard, bguess)
